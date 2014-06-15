@@ -12,6 +12,7 @@ $('#date-range').select2({
     var date_range = e.val.split('~');
     $('[name="start_date"]').val(date_range[0]);
     $('[name="end_date"]').val(date_range[1]);
+    $('[name="custom_range_title"]').val(e.added.text);
 });
 </script>
 </body>

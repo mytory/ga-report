@@ -81,8 +81,10 @@ function ga_print_table($results, $title = ''){
     if(isset($results->getTotalsForAllResults()['ga:pageviews'])){
         $pageviews = $results->getTotalsForAllResults()['ga:pageviews'];
     }
+    $cols = count($headers) * 2 <= 12 ? count($headers) * 2 : 12;
+
     ?>
-    <div class="row clearfix">
+    <div class="col-xs-<?php echo $cols ?> clearfix">
         <?php if($title) { ?>
             <h2><?php echo $title ?></h2>
         <?php } ?>
