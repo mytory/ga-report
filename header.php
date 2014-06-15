@@ -22,6 +22,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="<?php echo HOME_URL ?>">전체 프로필</a></li>
+            <li><a href="get_date_range.php">기간 설정</a></li>
         </ul>
     </div>
 </header>

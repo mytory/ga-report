@@ -13,12 +13,16 @@ $sessions = $source_medium_results->getTotalsForAllResults()['ga:sessions'];
 $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
 ?>
 <h1><?php echo $profile_name ?> 통계</h1>
-<p>
+<form>
     날짜 :
-    <?php echo date('Y-m-d(l)', strtotime($start_date)) ?>
+    <input class="text-right" type="date" name="start_date" value="<?php echo $start_date ?>"/>
     ~
-    <?php echo date('Y-m-d(l)', strtotime($end_date)) ?>
-</p>
+    <input class="text-right" type="date" name="end_date" value="<?php echo $end_date ?>"/>
+    <input name="profile_id" type="hidden" value="<?php echo $_GET['profile_id'] ?>"/>
+    <input class="btn btn-primary" type="submit" value="검색"/>
+    <?php ga_custom_ranges() ?>
+</form>
+
 <ul>
     <li>총 방문수 : <?php echo number_format($sessions) ?>회 (하루 평균 <?php echo number_format(round($sessions / $date_range)) ?>회)</li>
     <li>총 조회수 : <?php echo number_format($pageviews) ?>회 (하루 평균 <?php echo number_format(round($pageviews / $date_range)) ?>회)</li>

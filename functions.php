@@ -122,3 +122,26 @@ function ga_print_table($results, $title = ''){
     </div>
     <?php
 }
+
+function ga_custom_ranges(){
+    echo ga_get_custom_ranges();
+}
+
+function ga_get_custom_ranges(){
+    $range_list = json_decode(file_get_contents('date_range.json'), true);
+    if($range_list) {
+        $string = '<select id="date-range">';
+        foreach ($range_list as $range) {
+            if( ! isset($range['start_date']) or  ! isset($range['end_date'])){
+                echo "date_range.json 형식이 잘못됐습니다. start date나 end date가 없는 아이템이 있습니다.";
+                return false;
+            }
+            if( ! isset($range['title']) or empty($range['title'])){
+                $range['title'] = $range['start_date'] . '~' . $range['end_date'];
+            }
+            $string .= "<option value='{$range['start_date']}~{$range['end_date']}'>{$range['title']}</option>";
+        }
+        $string .= "</select>";
+        return $string;
+    }
+}
