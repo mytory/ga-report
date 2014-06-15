@@ -41,24 +41,26 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
     </div>
 </div>
 <div class="row">
-    <?php ga_print_table($results = $analytics->data_ga->get(
+    <?php ga_print_table($source_medium_results, '소스와 매체별 방문') ?>
+
+    <?php ga_print_table($analytics->data_ga->get(
         'ga:' . $_GET['profile_id'],
         $start_date,
         $end_date,
-        'ga:sessions,ga:pageviews',
+        'ga:pageviews',
         array(
-            'dimensions' => 'ga:medium',
+            'dimensions' => 'ga:keyword',
             'sort' => '-ga:pageviews',
             'start-index' => 1,
             'max-results' => 20,
         )
-    ), '매체별 방문'); ?>
+    ), '유입 검색어'); ?>
 
-    <?php ga_print_table($results = $analytics->data_ga->get(
+    <?php ga_print_table($analytics->data_ga->get(
         'ga:' . $_GET['profile_id'],
         $start_date,
         $end_date,
-        'ga:sessions,ga:pageviews',
+        'ga:pageviews',
         array(
             'dimensions' => 'ga:pageTitle,ga:pagePath',
             'sort' => '-ga:pageviews',
@@ -74,7 +76,7 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
         'ga:' . $_GET['profile_id'],
         $start_date,
         $end_date,
-        'ga:sessions,ga:pageviews',
+        'ga:pageviews',
         array(
             'dimensions' => 'ga:pageTitle,ga:pagePath',
             'sort' => '-ga:pageviews',
@@ -84,19 +86,5 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
         )
     ), '인기 기사 방문 소스'); ?>
 
-    <?php ga_print_table($results = $analytics->data_ga->get(
-        'ga:' . $_GET['profile_id'],
-        $start_date,
-        $end_date,
-        'ga:sessions,ga:pageviews',
-        array(
-            'dimensions' => 'ga:source',
-            'sort' => '-ga:pageviews',
-            'start-index' => 1,
-            'max-results' => 20,
-        )
-    ), '소스별 방문'); ?>
-
-    <?php ga_print_table($source_medium_results, '소스와 매체별 방문') ?>
 </div>
 <?php include "footer.php" ?>

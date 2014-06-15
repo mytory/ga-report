@@ -131,6 +131,7 @@ function ga_print_table($results, $title = '', $opt = array()){
         <table class="table <?php echo $opt['table_class'] ?>">
             <thead>
             <tr>
+                <th>순위</th>
                 <?php foreach ($headers as $header) { ?>
                     <th><?php ga_korean($header['name']) ?></th>
                 <?php } ?>
@@ -143,6 +144,7 @@ function ga_print_table($results, $title = '', $opt = array()){
                 $index++;
                 ?>
                 <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
+                    <td><?php echo $index ?></td>
                     <?php foreach ($row as $key => $column) { ?>
                         <td class="<?php echo is_numeric($column) ? "text-right" : "" ?>">
                             <?php echo ga_print_column($column, $headers[$key]['name'], $opt['sessions'], $opt['pageviews']) ?>
@@ -171,6 +173,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
         <table class="table">
             <thead>
             <tr>
+                <th>순위</th>
                 <?php foreach ($headers as $header) { ?>
                     <th><?php ga_korean($header['name']) ?></th>
                 <?php } ?>
@@ -186,6 +189,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                 $page_pageviews = '';
                 ?>
                 <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
+                    <td><?php echo $index ?></td>
                     <?php foreach ($row as $key => $column) { ?>
                         <td class="<?php echo is_numeric($column) ? "text-right" : "" ?>">
                             <?php echo ga_print_column($column, $headers[$key]['name']) ?>
@@ -207,7 +211,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                             'ga:' . $_GET['profile_id'],
                             $start_date,
                             $end_date,
-                            'ga:sessions,ga:pageviews',
+                            'ga:pageviews',
                             array(
                                 'dimensions' => 'ga:source,ga:medium',
                                 'sort' => '-ga:pageviews',
@@ -229,7 +233,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                             'ga:' . $_GET['profile_id'],
                             $start_date,
                             $end_date,
-                            'ga:sessions,ga:pageviews',
+                            'ga:pageviews',
                             array(
                                 'dimensions' => 'ga:source,ga:medium,ga:deviceCategory',
                                 'sort' => '-ga:pageviews',
