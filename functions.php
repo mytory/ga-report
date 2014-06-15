@@ -64,7 +64,21 @@ function ga_get_total($start_date, $end_date){
     return $results;
 }
 
-function ga_print_column($column){
+function ga_print_column($column, $key_name, $custom_sessions = '', $custom_pageviews = ''){
+    global $sessions, $pageviews;
+    if( ! $custom_sessions){
+        $custom_sessions = $sessions;
+    }
+    if( ! $custom_pageviews){
+        $custom_pageviews = $pageviews;
+    }
+
+    if($key_name == 'ga:sessions'){
+        return number_format($column) . ' <small>(' . round($column/$custom_sessions*100.0, 1) . '%)</small>';
+    }
+    if($key_name == 'ga:pageviews'){
+        return number_format($column) . ' <small>(' . round($column/$custom_pageviews*100.0, 1) . '%)</small>';
+    }
     if(is_numeric($column)){
         return number_format($column);
     }else if(strstr($column, '.')){
@@ -74,25 +88,33 @@ function ga_print_column($column){
     }
 }
 
-function ga_print_table($results, $title = ''){
+function ga_print_table($results, $title = '', $opt = array()){
+    global $sessions, $pageviews;
+    $default = array(
+        'cols' => '',
+        'sessions' => $sessions,
+        'pageviews' => $pageviews,
+        'table_class' => '',
+        'container_class' => '',
+    );
+    $opt = array_merge($default, $opt);
     $headers = $results->getColumnHeaders();
     $rows = $results->getRows();
-    $sessions = $results->getTotalsForAllResults()['ga:sessions'];
-    if(isset($results->getTotalsForAllResults()['ga:pageviews'])){
-        $pageviews = $results->getTotalsForAllResults()['ga:pageviews'];
-    }
-    $cols = count($headers) * 2 <= 12 ? count($headers) * 2 : 12;
 
+    $cols = $opt['cols'];
+    if( ! $cols){
+        $cols = count($headers) * 2 <= 12 ? count($headers) * 2 : 12;
+    }
     ?>
-    <div class="col-xs-<?php echo $cols ?> clearfix">
+    <div class="col-xs-<?php echo $cols ?> clearfix <?php echo $opt['container_class'] ?>">
         <?php if($title) { ?>
             <h2><?php echo $title ?></h2>
         <?php } ?>
-        <table class="table">
+        <table class="table <?php echo $opt['table_class'] ?>">
             <thead>
             <tr>
                 <?php foreach ($headers as $header) { ?>
-                    <th><?php echo $header['name'] ?></th>
+                    <th><?php ga_korean($header['name']) ?></th>
                 <?php } ?>
             </tr>
             </thead>
@@ -105,13 +127,7 @@ function ga_print_table($results, $title = ''){
                 <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
                     <?php foreach ($row as $key => $column) { ?>
                         <td class="<?php echo is_numeric($column) ? "text-right" : "" ?>">
-                            <?php echo ga_print_column($column) ?>
-                            <?php if($headers[$key]['name'] == 'ga:sessions'){ ?>
-                                <small>(<?php echo round($column/$sessions*100.0, 2) ?>%)</small>
-                            <?php } ?>
-                            <?php if($headers[$key]['name'] == 'ga:pageviews'){ ?>
-                                <small>(<?php echo round($column/$pageviews*100.0, 2) ?>%)</small>
-                            <?php } ?>
+                            <?php echo ga_print_column($column, $headers[$key]['name'], $opt['sessions'], $opt['pageviews']) ?>
                         </td>
                     <?php } ?>
                 </tr>
@@ -123,6 +139,80 @@ function ga_print_table($results, $title = ''){
         <?php } ?>
     </div>
     <?php
+}
+
+function ga_print_article_source($results, $title = '인기 기사 방문 소스'){
+    global $analytics, $start_date, $end_date;
+    $headers = $results->getColumnHeaders();
+    $rows = $results->getRows();
+    ?>
+    <div class="col-xs-12 clearfix">
+        <?php if($title) { ?>
+            <h2><?php echo $title ?></h2>
+        <?php } ?>
+        <table class="table">
+            <thead>
+            <tr>
+                <?php foreach ($headers as $header) { ?>
+                    <th><?php ga_korean($header['name']) ?></th>
+                <?php } ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $index = 0;
+            foreach ($rows as $row) {
+                $index++;
+                $page_path = '';
+                $page_sessions = '';
+                $page_pageviews = '';
+                ?>
+                <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
+                    <?php foreach ($row as $key => $column) { ?>
+                        <td class="<?php echo is_numeric($column) ? "text-right" : "" ?>">
+                            <?php echo ga_print_column($column, $headers[$key]['name']) ?>
+                            <?php if($headers[$key]['name'] == 'ga:pagePath'){
+                                $page_path = $column;
+                            } ?>
+                            <?php if($headers[$key]['name'] == 'ga:sessions'){
+                                $page_sessions = $column;
+                            } ?>
+                            <?php if($headers[$key]['name'] == 'ga:pageviews'){
+                                $page_pageviews = $column;
+                            } ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+                <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
+                    <td colspan="<?php echo count($headers) ?>">
+                        <?php ga_print_table($analytics->data_ga->get(
+                            'ga:' . $_GET['profile_id'],
+                            $start_date,
+                            $end_date,
+                            'ga:sessions,ga:pageviews',
+                            array(
+                                'dimensions' => 'ga:source',
+                                'sort' => '-ga:pageviews',
+                                'filters' => 'ga:pagePath==' . $page_path,
+                                'start-index' => 1,
+                                'max-results' => 3,
+                            )
+                        ), '', array(
+                            'cols' => 10,
+                            'sessions' => $page_sessions,
+                            'pageviews' => $page_pageviews,
+                            'container_class' => 'pull-right'
+                        )) ?>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+        <?php if(count($rows) > 10){ ?>
+            <button class="pull-right btn btn-default" onclick="$(this).prev().find('tr:hidden').show(); $(this).remove()">+ 다 보기</button>
+        <?php } ?>
+    </div>
+<?php
 }
 
 function ga_custom_ranges(){
@@ -145,5 +235,21 @@ function ga_get_custom_ranges(){
         }
         $string .= "</select>";
         return $string;
+    }
+}
+
+function ga_korean($header_name){
+    $korean = array(
+        'ga:medium' => '매체',
+        'ga:sessions' => '방문수',
+        'ga:pageviews' => '조회수',
+        'ga:source' => '소스',
+        'ga:pageTitle' => '제목',
+        'ga:pagePath' => '주소'
+    );
+    if(isset($korean[$header_name])){
+        echo $korean[$header_name];
+    }else{
+        $header_name;
     }
 }

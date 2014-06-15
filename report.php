@@ -45,20 +45,55 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
         'ga:' . $_GET['profile_id'],
         $start_date,
         $end_date,
-        'ga:sessions',
+        'ga:sessions,ga:pageviews',
         array(
             'dimensions' => 'ga:medium',
-            'sort' => '-ga:sessions'
+            'sort' => '-ga:pageviews',
+            'start-index' => 1,
+            'max-results' => 20,
         )
     ), '매체별 방문'); ?>
+
     <?php ga_print_table($results = $analytics->data_ga->get(
         'ga:' . $_GET['profile_id'],
         $start_date,
         $end_date,
-        'ga:sessions',
+        'ga:sessions,ga:pageviews',
+        array(
+            'dimensions' => 'ga:pageTitle,ga:pagePath',
+            'sort' => '-ga:pageviews',
+            'filters' => 'ga:pagePath=~\/article\/.*',
+            'start-index' => 1,
+            'max-results' => 20,
+        )
+    ), '인기 기사', array(
+        'cols' => 12
+    )); ?>
+
+    <?php ga_print_article_source($results = $analytics->data_ga->get(
+        'ga:' . $_GET['profile_id'],
+        $start_date,
+        $end_date,
+        'ga:sessions,ga:pageviews',
+        array(
+            'dimensions' => 'ga:pageTitle,ga:pagePath',
+            'sort' => '-ga:pageviews',
+            'filters' => 'ga:pagePath=~\/article\/.*',
+            'start-index' => 1,
+            'max-results' => 20,
+        )
+    ), '인기 기사 방문 소스'); ?>
+
+    <?php ga_print_table($results = $analytics->data_ga->get(
+        'ga:' . $_GET['profile_id'],
+        $start_date,
+        $end_date,
+        'ga:sessions,ga:pageviews',
         array(
             'dimensions' => 'ga:source',
-            'sort' => '-ga:sessions'
+            'sort' => '-ga:pageviews',
+            'start-index' => 1,
+            'max-results' => 20,
         )
     ), '소스별 방문'); ?>
 
