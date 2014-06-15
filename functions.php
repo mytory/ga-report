@@ -66,6 +66,17 @@ function ga_get_total($start_date, $end_date){
 
 function ga_print_column($column, $key_name, $custom_sessions = '', $custom_pageviews = ''){
     global $sessions, $pageviews;
+
+    if($column == 'mobile'){
+        return '모바일';
+    }
+    if($column == 'desktop'){
+        return '데스크톱';
+    }
+    if($column == 'tablet'){
+        return '태블릿';
+    }
+
     if( ! $custom_sessions){
         $custom_sessions = $sessions;
     }
@@ -198,11 +209,33 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                             $end_date,
                             'ga:sessions,ga:pageviews',
                             array(
-                                'dimensions' => 'ga:source',
+                                'dimensions' => 'ga:source,ga:medium',
                                 'sort' => '-ga:pageviews',
                                 'filters' => 'ga:pagePath==' . $page_path,
                                 'start-index' => 1,
                                 'max-results' => 3,
+                            )
+                        ), '', array(
+                            'cols' => 10,
+                            'sessions' => $page_sessions,
+                            'pageviews' => $page_pageviews,
+                            'container_class' => 'pull-right'
+                        )) ?>
+                    </td>
+                </tr>
+                <tr style="<?php echo $index > 10 ? 'display: none' : '' ?>">
+                    <td colspan="<?php echo count($headers) ?>">
+                        <?php ga_print_table($analytics->data_ga->get(
+                            'ga:' . $_GET['profile_id'],
+                            $start_date,
+                            $end_date,
+                            'ga:sessions,ga:pageviews',
+                            array(
+                                'dimensions' => 'ga:source,ga:medium,ga:deviceCategory',
+                                'sort' => '-ga:pageviews',
+                                'filters' => 'ga:pagePath==' . $page_path,
+                                'start-index' => 1,
+                                'max-results' => 6,
                             )
                         ), '', array(
                             'cols' => 10,
@@ -252,11 +285,12 @@ function ga_korean($header_name){
         'ga:pageviews' => '조회수',
         'ga:source' => '소스',
         'ga:pageTitle' => '제목',
-        'ga:pagePath' => '주소'
+        'ga:pagePath' => '주소',
+        'ga:deviceCategory' => '기기 종류',
     );
     if(isset($korean[$header_name])){
         echo $korean[$header_name];
     }else{
-        $header_name;
+        echo $header_name;
     }
 }

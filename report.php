@@ -80,7 +80,7 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
             'sort' => '-ga:pageviews',
             'filters' => 'ga:pagePath=~\/article\/.*',
             'start-index' => 1,
-            'max-results' => 20,
+            'max-results' => 10,
         )
     ), '인기 기사 방문 소스'); ?>
 
