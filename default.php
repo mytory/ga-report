@@ -31,6 +31,6 @@ if ( ! $client->getAccessToken() or $client->isAccessTokenExpired()) {
     exit;
 }
 
-$service = new Google_Service_Analytics($client);
+$analytics = new Google_Service_Analytics($client);
 
 
