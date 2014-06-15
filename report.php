@@ -64,7 +64,7 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
         array(
             'dimensions' => 'ga:pageTitle,ga:pagePath',
             'sort' => '-ga:pageviews',
-            'filters' => 'ga:pagePath=~\/article\/.*',
+            'filters' => 'ga:pagePath=~' . Config::$page_regex,
             'start-index' => 1,
             'max-results' => 20,
         )
@@ -80,7 +80,7 @@ $pageviews = $source_medium_results->getTotalsForAllResults()['ga:pageviews'];
         array(
             'dimensions' => 'ga:pageTitle,ga:pagePath',
             'sort' => '-ga:pageviews',
-            'filters' => 'ga:pagePath=~\/article\/.*',
+            'filters' => 'ga:pagePath=~' . Config::$page_regex,
             'start-index' => 1,
             'max-results' => 10,
         )
