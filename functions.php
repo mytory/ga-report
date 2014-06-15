@@ -79,6 +79,13 @@ function ga_print_column($column, $key_name, $custom_sessions = '', $custom_page
     if($key_name == 'ga:pageviews'){
         return number_format($column) . ' <small>(' . round($column/$custom_pageviews*100.0, 1) . '%)</small>';
     }
+    if($key_name == 'ga:pageTitle'){
+        if(isset(config::$removal_page_title) and config::$removal_page_title){
+            return str_replace(Config::$removal_page_title, '', $column);
+        }else{
+            return $column;
+        }
+    }
     if(is_numeric($column)){
         return number_format($column);
     }else if(strstr($column, '.')){

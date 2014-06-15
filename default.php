@@ -1,6 +1,7 @@
 <?php
 define("HOME_URL", "http://localhost/ga-report/");
 
+include "config.php";
 include "functions.php";
 
 session_start();
