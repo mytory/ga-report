@@ -217,7 +217,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                                 'sort' => '-ga:pageviews',
                                 'filters' => 'ga:pagePath==' . $page_path,
                                 'start-index' => 1,
-                                'max-results' => 3,
+                                'max-results' => 10,
                             )
                         ), '', array(
                             'cols' => 10,
@@ -239,7 +239,7 @@ function ga_print_article_source($results, $title = '인기 기사 방문 소스
                                 'sort' => '-ga:pageviews',
                                 'filters' => 'ga:pagePath==' . $page_path,
                                 'start-index' => 1,
-                                'max-results' => 6,
+                                'max-results' => 10,
                             )
                         ), '', array(
                             'cols' => 10,
