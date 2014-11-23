@@ -18,6 +18,7 @@ foreach ($range_list_11 as $range) {
     <thead>
     <tr>
         <th>호수</th>
+        <th>기간</th>
         <th>일수</th>
         <th>방문자수</th>
         <th>하루평균 방문자수</th>
@@ -30,15 +31,13 @@ foreach ($range_list_11 as $range) {
         $date_range = get_date_range($d['start_date'], $d['end_date']);
         ?>
         <tr>
-            <th>
-                <?=$d['title']?>
-                <small style="white-space: nowrap"><?=$d['start_date']?>~<?=$d['end_date']?></small>
-            </th>
-            <td><?=$date_range?>일</td>
-            <td><?=number_format($d['sessions'])?>회</td>
-            <td><?=number_format(round($d['sessions'] / $date_range))?>회</td>
-            <td><?=number_format($d['pageviews'])?>회</td>
-            <td><?=number_format(round($d['pageviews'] / $date_range))?>회</td>
+            <th><?=$d['title']?></th>
+            <td><?=$d['start_date']?>~<?=$d['end_date']?></td>
+            <td><?=$date_range?></td>
+            <td><?=number_format($d['sessions'])?></td>
+            <td><?=number_format(round($d['sessions'] / $date_range))?></td>
+            <td><?=number_format($d['pageviews'])?></td>
+            <td><?=number_format(round($d['pageviews'] / $date_range))?></td>
         </tr>
     <?php } ?>
     </tbody>
