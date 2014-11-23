@@ -29,6 +29,10 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="<?php echo HOME_URL ?>">전체 프로필</a></li>
+            <?php if(isset($_GET['profile_id'])){ ?>
+                <li><a href="trend.php?profile_id=<?= $_GET['profile_id'] ?>">추세</a></li>
+            <?php } ?>
+
             <li><a href="get_date_range.php">기간 설정</a></li>
         </ul>
     </div>

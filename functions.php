@@ -298,3 +298,8 @@ function ga_korean($header_name){
         echo $header_name;
     }
 }
+
+function get_date_range($start_date, $end_date){
+    return ( ( strtotime($end_date) - strtotime($start_date) ) / ( 60*60*24 ) ) + 1;
+
+}
